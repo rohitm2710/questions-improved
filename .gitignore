@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+myenv/
+.venv/
+venv/
+.env
+question.db
+.vercel/
+node_modules/

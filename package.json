@@ -1,0 +1,10 @@
+{
+    "name": "question-improved",
+    "version": "1.0.0",
+    "private": true,
+    "description": "MCQ practice app with a FastAPI backend and static HTML frontend",
+    "scripts": {
+        "start": "uvicorn main:app --reload",
+        "dev": "uvicorn main:app --reload"
+    }
+}

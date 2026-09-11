@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Answer Sheet — MCQ Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --paper: #efe9da;
+            --card: #fbf8f0;
+            --ink: #211f1a;
+            --ink-soft: #5b564a;
+            --rule: #c7bfa8;
+            --rule-strong: #a89d7d;
+            --stamp: #33415c;
+            --stamp-dark: #232d3f;
+            --correct: #2f6b4f;
+            --correct-bg: #e7efe6;
+            --wrong: #a8342a;
+            --wrong-bg: #f3e6e2;
+            --radius: 3px;
+            --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+            --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+        }
+        
+        body {
+            background-image: linear-gradient(var(--paper), var(--paper)), repeating-linear-gradient(0deg, rgba(90, 80, 50, 0.028) 0px, rgba(90, 80, 50, 0.028) 1px, transparent 1px, transparent 34px);
+            min-height: 100vh;
+        }
+        
+        .page {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 48px 24px 96px;
+        }
+        /* ---------- Header ---------- */
+        
+        header.masthead {
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+        }
+        
+        .wordmark {
+            font-family: var(--serif);
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+        
+        .tagline {
+            font-size: 0.92rem;
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+        }
+        
+        nav.tabs {
+            display: flex;
+            gap: 28px;
+            margin-top: 22px;
+        }
+        
+        .tab {
+            appearance: none;
+            background: none;
+            border: none;
+            padding: 6px 0 10px;
+            font-family: var(--sans);
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: var(--ink-soft);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            position: relative;
+            top: 2px;
+        }
+        
+        .tab[aria-selected="true"] {
+            color: var(--ink);
+            border-bottom-color: var(--stamp);
+        }
+        
+        .tab:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--stamp);
+            outline-offset: 2px;
+        }
+        /* ---------- Shared bits ---------- */
+        
+        .status-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            color: var(--ink-soft);
+            margin-bottom: 14px;
+        }
+        
+        .tag {
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 3px 9px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 999px;
+            color: var(--ink-soft);
+            text-transform: lowercase;
+        }
+        
+        .progress-rule {
+            height: 2px;
+            background: var(--rule);
+            margin-bottom: 28px;
+            position: relative;
+        }
+        
+        .progress-rule::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--progress, 0%);
+            background: var(--ink);
+            transition: width 0.3s ease;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .progress-rule::after {
+                transition: none;
+            }
+            * {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+        
+        h2.question-text {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.35;
+            margin: 0 0 24px;
+        }
+        
+        .options {
+            list-style: none;
+            margin: 0 0 22px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            width: 100%;
+            text-align: left;
+            background: var(--card);
+            border: 1px solid var(--rule);
+            border-left: 3px solid transparent;
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            font-family: var(--sans);
+            font-size: 0.98rem;
+            color: var(--ink);
+            cursor: pointer;
+        }
+        
+        .option:hover {
+            border-color: var(--rule-strong);
+        }
+        
+        .option[aria-checked="true"] {
+            border-left-color: var(--stamp);
+            background: #f4f0e2;
+        }
+        
+        .option .letter {
+            font-family: var(--serif);
+            font-weight: 600;
+            color: var(--ink-soft);
+            min-width: 1.1em;
+        }
+        
+        .option.is-correct {
+            border-left-color: var(--correct);
+            background: var(--correct-bg);
+        }
+        
+        .option.is-correct .letter {
+            color: var(--correct);
+        }
+        
+        .option.is-wrong {
+            border-left-color: var(--wrong);
+            background: var(--wrong-bg);
+        }
+        
+        .option.is-wrong .letter {
+            color: var(--wrong);
+        }
+        
+        .option:disabled {
+            cursor: default;
+        }
+        
+        .feedback {
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            padding: 10px 0;
+        }
+        
+        .feedback.correct {
+            color: var(--correct);
+        }
+        
+        .feedback.wrong {
+            color: var(--wrong);
+        }
+        
+        button.primary {
+            appearance: none;
+            border: none;
+            background: var(--stamp);
+            color: #f4f1e6;
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 12px 22px;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+        
+        button.primary:hover {
+            background: var(--stamp-dark);
+        }
+        
+        button.primary:disabled {
+            background: var(--rule);
+            color: var(--ink-soft);
+            cursor: not-allowed;
+        }
+        
+        button.ghost {
+            appearance: none;
+            background: none;
+            border: 1px solid var(--rule-strong);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-weight: 500;
+            font-size: 0.92rem;
+            padding: 10px 18px;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+        
+        button.ghost:hover {
+            border-color: var(--ink);
+        }
+        
+        .actions-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 4px;
+        }
+        /* ---------- Empty / loading / error states ---------- */
+        
+        .state-block {
+            border: 1px dashed var(--rule-strong);
+            border-radius: var(--radius);
+            padding: 36px 24px;
+            text-align: center;
+            color: var(--ink-soft);
+        }
+        
+        .state-block p {
+            margin: 0 0 16px;
+            font-size: 0.98rem;
+        }
+        
+        .state-block.error {
+            border-color: var(--wrong);
+            color: var(--wrong);
+        }
+        
+        .loading-text::after {
+            content: "";
+            animation: ellipsis 1.4s steps(4, end) infinite;
+        }
+        
+        @keyframes ellipsis {
+            0% {
+                content: "";
+            }
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75%,
+            100% {
+                content: "...";
+            }
+        }
+        /* ---------- Add-question form ---------- */
+        
+        form.add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        
+        .field label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            margin-bottom: 6px;
+        }
+        
+        .field input[type="text"],
+        .field textarea {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid var(--rule-strong);
+            background: transparent;
+            font-family: var(--sans);
+            font-size: 1rem;
+            color: var(--ink);
+            padding: 6px 2px 10px;
+            resize: vertical;
+        }
+        
+        .field textarea {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            min-height: 64px;
+        }
+        
+        .field input[type="text"]:focus,
+        .field textarea:focus {
+            outline: none;
+            border-bottom: 1px solid var(--stamp);
+        }
+        
+        .field.invalid input,
+        .field.invalid textarea {
+            border-bottom-color: var(--wrong);
+        }
+        
+        .field-error {
+            font-size: 0.8rem;
+            color: var(--wrong);
+            margin-top: 5px;
+        }
+        
+        .segmented {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .segmented button {
+            appearance: none;
+            background: var(--card);
+            border: 1px solid var(--rule-strong);
+            border-radius: 999px;
+            padding: 7px 16px;
+            font-family: var(--sans);
+            font-size: 0.88rem;
+            color: var(--ink-soft);
+            cursor: pointer;
+        }
+        
+        .segmented button[aria-pressed="true"] {
+            background: var(--stamp);
+            border-color: var(--stamp);
+            color: #f4f1e6;
+        }
+        
+        .option-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        .option-input-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        
+        .option-input-row .letter-box {
+            font-family: var(--serif);
+            font-weight: 600;
+            color: var(--ink-soft);
+            padding-bottom: 10px;
+        }
+        
+        .stamp-banner {
+            display: inline-block;
+            border: 2px solid var(--correct);
+            color: var(--correct);
+            font-family: var(--serif);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            transform: rotate(-1.5deg);
+            animation: stamp-in 0.25s ease-out;
+        }
+        
+        @keyframes stamp-in {
+            from {
+                opacity: 0;
+                transform: rotate(-1.5deg) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(-1.5deg) scale(1);
+            }
+        }
+        
+        .banner-error {
+            border: 1px solid var(--wrong);
+            background: var(--wrong-bg);
+            color: var(--wrong);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            font-size: 0.92rem;
+        }
+        
+        .settings-row {
+            margin-top: 56px;
+            padding-top: 16px;
+            border-top: 1px solid var(--rule);
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+        }
+        
+        .settings-row summary {
+            cursor: pointer;
+        }
+        
+        .settings-row .api-config {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .settings-row input[type="text"] {
+            flex: 1;
+            min-width: 220px;
+            border: 1px solid var(--rule-strong);
+            border-radius: var(--radius);
+            padding: 7px 9px;
+            font-family: var(--sans);
+            font-size: 0.85rem;
+            background: var(--card);
+            color: var(--ink);
+        }
+        
+        @media (max-width: 480px) {
+            .page {
+                padding: 32px 16px 72px;
+            }
+            .wordmark {
+                font-size: 1.6rem;
+            }
+            h2.question-text {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <header class="masthead">
+            <p class="wordmark">Answer Sheet</p>
+            <p class="tagline">Practice multiple-choice questions, or add your own to the set.</p>
+            <nav class="tabs" role="tablist" aria-label="Sections">
+                <button class="tab" role="tab" id="tab-quiz" aria-selected="true" data-view="quiz">Quiz</button>
+                <button class="tab" role="tab" id="tab-add" aria-selected="false" data-view="add">Add question</button>
+            </nav>
+        </header>
+
+        <main id="view-root" aria-live="polite"></main>
+
+        <details class="settings-row">
+            <summary>API connection</summary>
+            <div class="api-config">
+                <input type="text" id="api-base-input" aria-label="API base URL">
+                <button class="ghost" id="api-base-save" type="button">Save</button>
+                <span id="api-base-status"></span>
+            </div>
+        </details>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            var DEFAULT_API_BASE = window.location.protocol === "file:" ?
+                "http://127.0.0.1:8000" :
+                window.location.origin;
+            var STORAGE_KEY = "answerSheet.apiBaseUrl";
+
+            function getApiBase() {
+                return localStorage.getItem(STORAGE_KEY) || DEFAULT_API_BASE;
+            }
+
+            var apiInput = document.getElementById("api-base-input");
+            var apiStatus = document.getElementById("api-base-status");
+            apiInput.value = getApiBase();
+            document.getElementById("api-base-save").addEventListener("click", function() {
+                var value = apiInput.value.trim().replace(/\/$/, "");
+                if (value) {
+                    localStorage.setItem(STORAGE_KEY, value);
+                    apiStatus.textContent = "Saved. Reload to apply.";
+                }
+            });
+
+            // ---------- API helpers ----------
+
+            function getQuestions() {
+                return fetch(getApiBase() + "/questions", {
+                    headers: {
+                        Accept: "application/json"
+                    }
+                }).then(function(res) {
+                    if (!res.ok) throw new Error("Could not load questions (" + res.status + ")");
+                    return res.json();
+                });
+            }
+
+            function createQuestion(input) {
+                return fetch(getApiBase() + "/mcq", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json"
+                    },
+                    body: JSON.stringify(input)
+                }).then(function(res) {
+                    if (!res.ok) {
+                        return res.json().catch(function() {
+                            return null;
+                        }).then(function(body) {
+                            var msg = body && body.detail ? "Please check the question form." : "Could not create question (" + res.status + ")";
+                            throw new Error(msg);
+                        });
+                    }
+                    return res.json();
+                });
+            }
+
+            // ---------- State ----------
+
+            var state = {
+                view: "quiz",
+                questions: null,
+                loadError: null,
+                loading: false,
+                quizIndex: 0,
+                selectedKey: null,
+                checked: false,
+                score: 0
+            };
+
+            var root = document.getElementById("view-root");
+            var tabQuiz = document.getElementById("tab-quiz");
+            var tabAdd = document.getElementById("tab-add");
+
+            function el(tag, attrs, children) {
+                var node = document.createElement(tag);
+                attrs = attrs || {};
+                Object.keys(attrs).forEach(function(key) {
+                    var value = attrs[key];
+                    if (value === null || value === undefined) return;
+                    if (key === "class") node.className = value;
+                    else if (key === "text") node.textContent = value;
+                    else if (key.indexOf("on") === 0 && typeof value === "function") {
+                        node.addEventListener(key.slice(2), value);
+                    } else {
+                        node.setAttribute(key, value);
+                    }
+                });
+                (children || []).forEach(function(child) {
+                    if (child) node.appendChild(child);
+                });
+                return node;
+            }
+
+            function switchView(view) {
+                state.view = view;
+                tabQuiz.setAttribute("aria-selected", String(view === "quiz"));
+                tabAdd.setAttribute("aria-selected", String(view === "add"));
+                render();
+                if (view === "quiz" && state.questions === null && !state.loading) {
+                    loadQuestions();
+                }
+            }
+
+            tabQuiz.addEventListener("click", function() {
+                switchView("quiz");
+            });
+            tabAdd.addEventListener("click", function() {
+                switchView("add");
+            });
+
+            function loadQuestions() {
+                state.loading = true;
+                state.loadError = null;
+                render();
+                getQuestions().then(function(data) {
+                    state.questions = data.value || [];
+                    state.loading = false;
+                    state.quizIndex = 0;
+                    state.selectedKey = null;
+                    state.checked = false;
+                    state.score = 0;
+                    render();
+                }).catch(function(err) {
+                    state.loading = false;
+                    state.loadError = err.message || "Something went wrong.";
+                    render();
+                });
+            }
+
+            // ---------- Quiz view ----------
+
+            function renderQuiz() {
+                if (state.loading) {
+                    var loadBlock = el("div", {
+                        class: "state-block"
+                    }, [
+                        el("p", {
+                            class: "loading-text",
+                            text: "Loading questions"
+                        })
+                    ]);
+                    return loadBlock;
+                }
+
+                if (state.loadError) {
+                    return el("div", {
+                        class: "state-block error"
+                    }, [
+                        el("p", {
+                            text: "Couldn't reach the API — " + state.loadError
+                        }),
+                        el("button", {
+                            class: "primary",
+                            text: "Try again",
+                            onclick: loadQuestions
+                        })
+                    ]);
+                }
+
+                if (!state.questions || state.questions.length === 0) {
+                    return el("div", {
+                        class: "state-block"
+                    }, [
+                        el("p", {
+                            text: "No questions yet. Add the first one to start a quiz."
+                        }),
+                        el("button", {
+                            class: "primary",
+                            text: "Add a question",
+                            onclick: function() {
+                                switchView("add");
+                            }
+                        })
+                    ]);
+                }
+
+                var total = state.questions.length;
+
+                if (state.quizIndex >= total) {
+                    var frag = document.createDocumentFragment();
+                    frag.appendChild(el("h2", {
+                        class: "question-text",
+                        text: "That's the set."
+                    }));
+                    frag.appendChild(el("p", {
+                        text: "You scored " + state.score + " of " + total + "."
+                    }));
+                    frag.appendChild(el("div", {
+                        class: "actions-row"
+                    }, [
+                        el("button", {
+                            class: "primary",
+                            text: "Restart",
+                            onclick: function() {
+                                state.quizIndex = 0;
+                                state.selectedKey = null;
+                                state.checked = false;
+                                state.score = 0;
+                                render();
+                            }
+                        })
+                    ]));
+                    var wrap = el("div", {}, []);
+                    wrap.appendChild(frag);
+                    return wrap;
+                }
+
+                var q = state.questions[state.quizIndex];
+                var letters = ["a", "b", "c", "d"];
+                var optionMap = {
+                    a: q.option_a,
+                    b: q.option_b,
+                    c: q.option_c,
+                    d: q.option_d
+                };
+                var correctKey = (q.answer || "").trim().toLowerCase();
+
+                var container = document.createElement("div");
+
+                container.appendChild(el("div", {
+                    class: "status-line"
+                }, [
+                    el("span", {
+                        text: "Question " + (state.quizIndex + 1) + " of " + total
+                    }),
+                    el("span", {
+                        class: "tag",
+                        text: q.difficulty || ""
+                    })
+                ]));
+
+                var progressRule = el("div", {
+                    class: "progress-rule"
+                });
+                progressRule.style.setProperty("--progress", Math.round(((state.quizIndex) / total) * 100) + "%");
+                container.appendChild(progressRule);
+
+                container.appendChild(el("h2", {
+                    class: "question-text",
+                    text: q.question
+                }));
+
+                var list = el("ul", {
+                    class: "options",
+                    role: "radiogroup",
+                    "aria-label": "Answer options"
+                });
+
+                letters.forEach(function(key) {
+                    var isSelected = state.selectedKey === key;
+                    var classes = "option";
+                    if (state.checked) {
+                        if (key === correctKey) classes += " is-correct";
+                        else if (isSelected && key !== correctKey) classes += " is-wrong";
+                    }
+                    var li = document.createElement("li");
+                    var btn = el("button", {
+                        class: classes,
+                        type: "button",
+                        role: "radio",
+                        "aria-checked": String(isSelected),
+                        disabled: state.checked ? "disabled" : null,
+                        onclick: function() {
+                            if (state.checked) return;
+                            state.selectedKey = key;
+                            render();
+                        }
+                    }, [
+                        el("span", {
+                            class: "letter",
+                            text: key + "."
+                        }),
+                        el("span", {
+                            text: optionMap[key] || ""
+                        })
+                    ]);
+                    li.appendChild(btn);
+                    list.appendChild(li);
+                });
+
+                container.appendChild(list);
+
+                if (state.checked) {
+                    var wasCorrect = state.selectedKey === correctKey;
+                    var fb = el("p", {
+                        class: "feedback " + (wasCorrect ? "correct" : "wrong"),
+                        text: wasCorrect ? "Correct." : "Not quite — the correct answer is " + correctKey.toUpperCase() + "."
+                    });
+                    container.appendChild(fb);
+
+                    var isLast = state.quizIndex + 1 >= total;
+                    container.appendChild(el("div", {
+                        class: "actions-row"
+                    }, [
+                        el("button", {
+                            class: "primary",
+                            text: isLast ? "See results" : "Next question",
+                            onclick: function() {
+                                state.quizIndex += 1;
+                                state.selectedKey = null;
+                                state.checked = false;
+                                render();
+                            }
+                        })
+                    ]));
+                } else {
+                    container.appendChild(el("div", {
+                        class: "actions-row"
+                    }, [
+                        el("button", {
+                            class: "primary",
+                            text: "Check answer",
+                            disabled: state.selectedKey ? null : "disabled",
+                            onclick: function() {
+                                if (!state.selectedKey) return;
+                                state.checked = true;
+                                if (state.selectedKey === correctKey) state.score += 1;
+                                render();
+                            }
+                        })
+                    ]));
+                }
+
+                return container;
+            }
+
+            // ---------- Add-question view ----------
+
+            var addFormState = {
+                difficulty: "easy",
+                question: "",
+                option_a: "",
+                option_b: "",
+                option_c: "",
+                option_d: "",
+                answer: "a",
+                errors: {},
+                submitting: false,
+                successNumber: null,
+                submitError: null
+            };
+
+            function renderAddForm() {
+                var container = document.createElement("div");
+
+                if (addFormState.successNumber !== null) {
+                    container.appendChild(el("div", {
+                        class: "stamp-banner",
+                        text: "Added as question #" + addFormState.successNumber
+                    }));
+                    container.appendChild(el("p", {
+                        style: "margin-top:18px;"
+                    }, []));
+                    var linkRow = el("p", {}, [
+                        el("button", {
+                            class: "ghost",
+                            text: "View it in the quiz",
+                            onclick: function() {
+                                addFormState.successNumber = null;
+                                state.questions = null;
+                                switchView("quiz");
+                            }
+                        })
+                    ]);
+                    container.appendChild(linkRow);
+                }
+
+                if (addFormState.submitError) {
+                    container.appendChild(el("div", {
+                        class: "banner-error",
+                        text: addFormState.submitError,
+                        style: "margin-bottom:18px;"
+                    }));
+                }
+
+                var form = el("form", {
+                    class: "add-form"
+                });
+
+                form.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    handleAddSubmit();
+                });
+
+                // Difficulty
+                var diffField = el("div", {
+                    class: "field"
+                }, [
+                    el("label", {
+                        text: "Difficulty"
+                    })
+                ]);
+                var diffSeg = el("div", {
+                    class: "segmented"
+                });
+                ["easy", "medium", "hard"].forEach(function(level) {
+                    diffSeg.appendChild(el("button", {
+                        type: "button",
+                        "aria-pressed": String(addFormState.difficulty === level),
+                        text: level,
+                        onclick: function() {
+                            addFormState.difficulty = level;
+                            renderAdd();
+                        }
+                    }));
+                });
+                diffField.appendChild(diffSeg);
+                form.appendChild(diffField);
+
+                // Question
+                form.appendChild(makeTextField("question", "Question", "textarea"));
+
+                // Options
+                var optWrap = el("div", {
+                    class: "field"
+                }, [el("label", {
+                    text: "Options"
+                })]);
+                var optInputs = el("div", {
+                    class: "option-inputs"
+                });
+                ["option_a", "option_b", "option_c", "option_d"].forEach(function(key, idx) {
+                    var letter = String.fromCharCode(97 + idx);
+                    var row = el("div", {
+                        class: "option-input-row"
+                    }, [
+                        el("span", {
+                            class: "letter-box",
+                            text: letter + "."
+                        })
+                    ]);
+                    var input = el("input", {
+                        type: "text",
+                        value: addFormState[key],
+                        "aria-label": "Option " + letter.toUpperCase(),
+                        oninput: function(e) {
+                            addFormState[key] = e.target.value;
+                        }
+                    });
+                    row.appendChild(input);
+                    optInputs.appendChild(row);
+                    if (addFormState.errors[key]) {
+                        optInputs.appendChild(el("div", {
+                            class: "field-error",
+                            text: addFormState.errors[key]
+                        }));
+                    }
+                });
+                optWrap.appendChild(optInputs);
+                form.appendChild(optWrap);
+
+                // Correct answer
+                var ansField = el("div", {
+                    class: "field"
+                }, [el("label", {
+                    text: "Correct answer"
+                })]);
+                var ansSeg = el("div", {
+                    class: "segmented"
+                });
+                ["a", "b", "c", "d"].forEach(function(key) {
+                    ansSeg.appendChild(el("button", {
+                        type: "button",
+                        "aria-pressed": String(addFormState.answer === key),
+                        text: key,
+                        onclick: function() {
+                            addFormState.answer = key;
+                            renderAdd();
+                        }
+                    }));
+                });
+                ansField.appendChild(ansSeg);
+                form.appendChild(ansField);
+
+                form.appendChild(el("div", {
+                    class: "actions-row"
+                }, [
+                    el("button", {
+                        class: "primary",
+                        type: "submit",
+                        text: addFormState.submitting ? "Adding…" : "Add question",
+                        disabled: addFormState.submitting ? "disabled" : null
+                    })
+                ]));
+
+                container.appendChild(form);
+                return container;
+            }
+
+            function makeTextField(key, labelText, kind) {
+                var hasError = !!addFormState.errors[key];
+                var field = el("div", {
+                    class: "field" + (hasError ? " invalid" : "")
+                }, [
+                    el("label", {
+                        text: labelText,
+                        for: "field-" + key
+                    })
+                ]);
+                var input = el(kind === "textarea" ? "textarea" : "input", {
+                    id: "field-" + key,
+                    type: kind === "textarea" ? null : "text",
+                    oninput: function(e) {
+                        addFormState[key] = e.target.value;
+                    }
+                });
+                input.value = addFormState[key];
+                field.appendChild(input);
+                if (hasError) field.appendChild(el("div", {
+                    class: "field-error",
+                    text: addFormState.errors[key]
+                }));
+                return field;
+            }
+
+            function validateAddForm() {
+                var errors = {};
+                var required = ["question", "option_a", "option_b", "option_c", "option_d"];
+                required.forEach(function(key) {
+                    if (!addFormState[key] || !addFormState[key].trim()) {
+                        errors[key] = "This field is required.";
+                    }
+                });
+                addFormState.errors = errors;
+                return Object.keys(errors).length === 0;
+            }
+
+            function handleAddSubmit() {
+                addFormState.submitError = null;
+                if (!validateAddForm()) {
+                    renderAdd();
+                    return;
+                }
+                addFormState.submitting = true;
+                renderAdd();
+
+                createQuestion({
+                    difficulty: addFormState.difficulty,
+                    question: addFormState.question.trim(),
+                    option_a: addFormState.option_a.trim(),
+                    option_b: addFormState.option_b.trim(),
+                    option_c: addFormState.option_c.trim(),
+                    option_d: addFormState.option_d.trim(),
+                    answer: addFormState.answer
+                }).then(function(res) {
+                    addFormState.submitting = false;
+                    addFormState.successNumber = res.number;
+                    addFormState.question = "";
+                    addFormState.option_a = "";
+                    addFormState.option_b = "";
+                    addFormState.option_c = "";
+                    addFormState.option_d = "";
+                    addFormState.answer = "a";
+                    addFormState.difficulty = "easy";
+                    renderAdd();
+                }).catch(function(err) {
+                    addFormState.submitting = false;
+                    addFormState.submitError = err.message || "Could not add the question.";
+                    renderAdd();
+                });
+            }
+
+            function renderAdd() {
+                root.innerHTML = "";
+                root.appendChild(renderAddForm());
+            }
+
+            function render() {
+                if (state.view === "quiz") {
+                    root.innerHTML = "";
+                    root.appendChild(renderQuiz());
+                } else {
+                    renderAdd();
+                }
+            }
+
+            render();
+            loadQuestions();
+        })();
+    </script>
+</body>
+
+</html>
