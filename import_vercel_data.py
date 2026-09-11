@@ -60,7 +60,7 @@ def prepare_database(database_path: Path) -> None:
         )
 
 
-def import_questions(database_path: Path, questions: list[dict], merge: bool) -> None:
+def import_questions(database_path: Path, questions: list[dict], merge: bool) -> dict[str, int]:
     prepare_database(database_path)
 
     if not merge and database_path.exists():
@@ -74,14 +74,51 @@ def import_questions(database_path: Path, questions: list[dict], merge: bool) ->
         if not merge:
             connection.execute("DELETE FROM mcq")
 
-        connection.executemany(
-            """
-            INSERT OR REPLACE INTO mcq
-                (id, difficulty, question, option_a, option_b, option_c, option_d, answer)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            [tuple(question[column] for column in COLUMNS) for question in questions],
-        )
+            connection.executemany(
+                """
+                INSERT INTO mcq
+                    (id, difficulty, question, option_a, option_b, option_c, option_d, answer)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                [tuple(question[column] for column in COLUMNS) for question in questions],
+            )
+            return {"added": len(questions), "updated": 0, "skipped": 0}
+
+        existing = {
+            row[0]: dict(zip(COLUMNS, row))
+            for row in connection.execute("SELECT * FROM mcq")
+        }
+        added = 0
+        updated = 0
+        skipped = 0
+
+        for question in questions:
+            question_id = question["id"]
+            if question_id not in existing:
+                connection.execute(
+                    """
+                    INSERT INTO mcq
+                        (id, difficulty, question, option_a, option_b, option_c, option_d, answer)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    tuple(question[column] for column in COLUMNS),
+                )
+                added += 1
+            elif all(existing[question_id][column] == question[column] for column in COLUMNS):
+                skipped += 1
+            else:
+                connection.execute(
+                    """
+                    UPDATE mcq
+                    SET difficulty = ?, question = ?, option_a = ?, option_b = ?,
+                        option_c = ?, option_d = ?, answer = ?
+                    WHERE id = ?
+                    """,
+                    tuple(question[column] for column in COLUMNS[1:]) + (question_id,),
+                )
+                updated += 1
+
+    return {"added": added, "updated": updated, "skipped": skipped}
 
 
 def main() -> int:
@@ -104,13 +141,16 @@ def main() -> int:
 
     try:
         questions = fetch_questions(arguments.api_url)
-        import_questions(database_path, questions, arguments.merge)
+        stats = import_questions(database_path, questions, arguments.merge)
     except (OSError, RuntimeError, sqlite3.Error) as error:
         print(f"Import failed: {error}", file=sys.stderr)
         return 1
 
     mode = "merged into" if arguments.merge else "copied into"
-    print(f"{len(questions)} question(s) {mode} {database_path}")
+    print(
+        f"{len(questions)} question(s) {mode} {database_path} "
+        f"(added: {stats['added']}, updated: {stats['updated']}, skipped: {stats['skipped']})"
+    )
     return 0
 
 
