@@ -19,14 +19,23 @@ fi
 
 trap 'echo; echo "Mining stopped."; exit 0' INT TERM
 
+run_count=0
+
 while true; do
 	printf '[%s] Fetching questions from %s...\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$API_URL"
 
 	if "$PYTHON_BIN" "$SCRIPT_DIR/import_vercel_data.py" "$API_URL" --merge; then
-		printf '[%s] Mining complete. Next run in %s seconds.\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$INTERVAL_SECONDS"
+		run_count=$((run_count + 1))
+		printf '[%s] Mining cycle #%d complete.\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$run_count"
 	else
-		printf '[%s] Mining failed. Retrying in %s seconds.\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$INTERVAL_SECONDS" >&2
+		printf '[%s] Mining cycle failed.\n' "$(date '+%Y-%m-%d %H:%M:%S')" >&2
 	fi
 
-	sleep "$INTERVAL_SECONDS"
+	remaining=$INTERVAL_SECONDS
+	while (( remaining > 0 )); do
+		printf '\rNext mining cycle in %3d seconds...' "$remaining"
+		sleep 1
+		remaining=$((remaining - 1))
+	done
+	printf '\rStarting next mining cycle.                    \n'
 done
