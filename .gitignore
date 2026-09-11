@@ -5,5 +5,6 @@ myenv/
 venv/
 .env
 question.db
+*.backup-*.db
 .vercel/
 node_modules/
