@@ -539,6 +539,22 @@
                     DEFAULT_API_BASE;
             }
 
+            function loadApiConfig() {
+                return fetch("api.txt", {
+                    cache: "no-store"
+                }).then(function(res) {
+                    if (!res.ok) throw new Error("Could not load api.txt");
+                    return res.text();
+                }).then(function(value) {
+                    var configuredApi = value.trim().replace(/\/$/, "");
+                    if (configuredApi && configuredApi.indexOf("your-ngrok-url") === -1) {
+                        api = configuredApi;
+                    }
+                }).catch(function() {
+                    // Keep the inline, saved, or local API fallback when api.txt is unavailable.
+                });
+            }
+
             var apiInput = document.getElementById("api-base-input");
             var apiStatus = document.getElementById("api-base-status");
             apiInput.value = getApiBase();
@@ -1105,7 +1121,7 @@
             }
 
             render();
-            loadQuestions();
+            loadApiConfig().then(loadQuestions);
         })();
     </script>
 </body>
