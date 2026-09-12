@@ -527,13 +527,16 @@
         (function() {
             "use strict";
 
+            var api = "";
             var DEFAULT_API_BASE = window.location.protocol === "file:" ?
                 "http://127.0.0.1:8000" :
                 window.location.origin;
             var STORAGE_KEY = "answerSheet.apiBaseUrl";
 
             function getApiBase() {
-                return localStorage.getItem(STORAGE_KEY) || DEFAULT_API_BASE;
+                return api.trim().replace(/\/$/, "") ||
+                    localStorage.getItem(STORAGE_KEY) ||
+                    DEFAULT_API_BASE;
             }
 
             var apiInput = document.getElementById("api-base-input");
